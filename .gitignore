@@ -1,2 +1,3 @@
-secret.js
+/src/secret.ts
 /node_modules
+/build
