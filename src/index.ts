@@ -7,8 +7,9 @@ import {
   DiscordGatewayAdapterCreator,
 } from "@discordjs/voice";
 import { isBlank } from "./utils";
+import * as secret from './secret';
 // token here
-const TOKEN = "";
+const TOKEN = secret.TOKEN;
 
 const bot = new Discord.Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_VOICE_STATES"],
@@ -32,8 +33,9 @@ bot.on("voiceStateUpdate", (oldMember, newMember) => {
   const newUserChannelId: string = newMember.channelId || "";
   const oldUserChannelId: string = oldMember.channelId || "";
 
-  if (isBlank(newUserChannelId)) throw new Error(`${newUserChannelId} is null or empty!`);
-  if (isBlank(oldUserChannelId)) throw new Error(`${newUserChannelId} is null or empty!`);
+  // These are allowed to be blank as it denotes the state of the channel/user before and after.
+  // if (isBlank(newUserChannelId)) throw new Error(`${newUserChannelId} is null or empty!`);
+  // if (isBlank(oldUserChannelId)) throw new Error(`${newUserChannelId} is null or empty!`);
 
   if (!oldUserChannelId && newUserChannelId) {
     const conn = joinVoiceChannel({
@@ -42,11 +44,13 @@ bot.on("voiceStateUpdate", (oldMember, newMember) => {
       adapterCreator: newMember.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator,
     });
 
-    const rng = getRandomInt(10);
+    
 
     const player = createAudioPlayer();
     const sub = conn.subscribe(player);
 
+    // RNG to determine which clips to play
+    // const rng = getRandomInt(10);
     // if(rng < 8){
     //     player.play(createAudioResource(audio[0]));
     // } else if (rng === 8){
